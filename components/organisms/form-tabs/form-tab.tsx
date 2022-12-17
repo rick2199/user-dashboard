@@ -39,13 +39,6 @@ const FormTabs = () => {
   const [, path] = router.asPath.split("/");
   return (
     <div className="w-full md:px-6 lg:px-0">
-      <Image
-        src="/icons/logo.svg"
-        alt="The Defiant"
-        width={100}
-        height={100}
-        className="mx-auto mb-[74px] hidden md:block"
-      />
       <ul className="flex w-max">
         {formsData.map((item: any, index: number) => (
           <Tab

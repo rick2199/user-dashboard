@@ -16,7 +16,7 @@ const ForgotPasswordForm = () => {
   const [showValidationPage, setShowValidationPage] = useState<boolean>(false);
 
   return (
-    <div className="h-full md:px-6 lg:px-0 bg-white text-center pt-[42px]">
+    <div className="h-full md:px-6 lg:px-0 bg-white text-center">
       <Formik
         initialValues={{
           email: "",
@@ -65,7 +65,7 @@ const ForgotPasswordForm = () => {
       >
         {({ errors, touched }) => {
           return (
-            <Form>
+            <Form className="flex flex-col gap-6">
               {!showValidationPage ? (
                 <>
                   <FormDescription
@@ -88,9 +88,9 @@ const ForgotPasswordForm = () => {
                   </div>
 
                   <Button
-                    title={`Reset${loading ? "ting" : ""} Password`}
+                    title={`Send${loading ? "ing" : ""} reset link`}
                     disabled={false}
-                    className="mt-12"
+                    className="mt-6"
                   />
                 </>
               ) : (

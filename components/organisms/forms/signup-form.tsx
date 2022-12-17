@@ -17,11 +17,11 @@ const SignupForm = () => {
   const [isEmailSent, setEmailSent] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   return (
-    <div className="h-full w-full md:px-6 lg:px-0 bg-white text-center">
+    <div className=" w-full md:px-6 lg:px-0 bg-white text-center">
       {!isEmailSent ? (
         <Formik
           initialValues={{
-            usermame: "",
+            userName: "",
             email: "",
             password: "",
             confirmPassword: "",
@@ -32,13 +32,13 @@ const SignupForm = () => {
             password,
             confirmPassword,
             terms,
-            usermame,
+            userName,
           }) => {
             const errors: any = {};
-            if (!usermame) {
-              errors.usermame = "Please enter a usermame";
-            } else if (!usernameRegex.test(usermame)) {
-              errors.usermame = "This isn’t a valid usermame";
+            if (!userName) {
+              errors.userName = "Please enter a username";
+            } else if (!usernameRegex.test(userName)) {
+              errors.userName = "This isn’t a valid username";
             }
             if (!email) {
               errors.email = "Please enter an email";
@@ -78,7 +78,7 @@ const SignupForm = () => {
 
             return errors;
           }}
-          onSubmit={async ({ usermame, password, email }, { resetForm }) => {
+          onSubmit={async ({ userName, password, email }, { resetForm }) => {
             setLoading(true);
             const clientHash = keccak(256)(password);
             try {
@@ -86,7 +86,7 @@ const SignupForm = () => {
                 method: "POST",
                 url: "/register",
                 data: {
-                  usermame,
+                  userName,
                   password: clientHash,
                   email,
                   name: "My first view",
@@ -107,9 +107,9 @@ const SignupForm = () => {
               }
               if (
                 ((err as AxiosError).response?.data as any)?.message ===
-                "Usermame is taken"
+                "Username is taken"
               ) {
-                setOnSubmitError("Usermame is taken");
+                setOnSubmitError("Username is taken");
               }
               if (
                 ((err as AxiosError).response?.data as any)?.message ===
@@ -126,10 +126,21 @@ const SignupForm = () => {
             }
           }}
         >
-          {({ errors, touched }) => {
+          {({ errors, touched, values }) => {
+            const isCompleted =
+              !!values.confirmPassword &&
+              !!values.email &&
+              !!values.password &&
+              !!values.terms &&
+              !!values.userName;
+
+            console.log({ values });
+
+            console.log({ isCompleted });
+
             return (
               <Form>
-                <div className="my-8 md:h-full md:w-full">
+                <div className="mt-8 md:h-full md:w-full">
                   <FormField
                     label="Email"
                     type="email"
@@ -137,7 +148,7 @@ const SignupForm = () => {
                     touched={touched.email as boolean}
                     isRequired={true}
                   />
-                  {!touched.email && !errors.email ? (
+                  {!errors.email ? (
                     <Text className="relative top-1 text-left">
                       Your email is never public and only used for communication
                       and account recovery.
@@ -147,12 +158,12 @@ const SignupForm = () => {
                   )}
                   {errors.email !==
                     "You need to migrate your account first, click here" && (
-                    <>
+                    <div className="my-6 flex flex-col gap-6">
                       <FormField
-                        label="Usermame"
-                        type="usermame"
-                        error={errors.usermame as string}
-                        touched={touched.usermame as boolean}
+                        label="Username"
+                        type="userName"
+                        error={errors.userName as string}
+                        touched={touched.userName as boolean}
                         isRequired={true}
                       />
                       <FormField
@@ -169,7 +180,7 @@ const SignupForm = () => {
                         touched={touched.confirmPassword as boolean}
                         isRequired={true}
                       />
-                    </>
+                    </div>
                   )}
                 </div>
                 {errors.email !==
@@ -195,7 +206,7 @@ const SignupForm = () => {
                   </div>
                 )}
                 <Button
-                  disabled={!!errors.terms || !touched.terms}
+                  disabled={!isCompleted}
                   title={`Creat${loading ? "ing" : "e"} Account`}
                   className={`mt-5 ${loading ? "opacity-50" : ""}`}
                 />

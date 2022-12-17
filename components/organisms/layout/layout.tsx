@@ -1,5 +1,5 @@
-import { FormTabs } from "@/components/molecules/form-tabs";
-import { SideContent } from "@/components/molecules/side-content/";
+import Image from "next/image";
+import { SideContent } from "@/components/organisms/side-content";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -7,13 +7,21 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="flex h-screen flex-col md:flex-row">
-      <header className="md:basis-[48%] lg:basis-auto">
+    <div className="flex h-screen flex-col md:flex-row ">
+      <aside className="max-w-[560px] h-full md:basis-[40%] bg-darkBg">
         <SideContent />
-      </header>
-      <main className="md:m-auto lg:w-[384px] p-10 md:p-0 m-0 md:basis-[52%] lg:basis-auto">
-        <FormTabs />
-        {children}
+      </aside>
+      <main className="lg:w-[384px] p-10  m-0 md:py-20  md:overflow-y-auto md:basis-[60%]">
+        <div className="mx-auto max-w-sm">
+          <Image
+            src="/icons/logo.svg"
+            alt="The Defiant"
+            width={100}
+            height={100}
+            className="mx-auto mb-[74px] hidden md:block"
+          />
+          {children}
+        </div>
       </main>
     </div>
   );

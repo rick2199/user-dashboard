@@ -5,7 +5,7 @@ import sideContentData from "@/data/side-content.json";
 
 const SideContent = () => {
   return (
-    <div className="max-w-[560px] bg-darkBg text-text-inverse-default h-full flex flex-col md:items-center justify-center px-6 md:px-10 pt-6 lg:px-16 lg:pt-0">
+    <div className=" text-text-inverse-default h-full flex flex-col md:items-center justify-center px-6 md:px-10 pt-6 lg:px-16 lg:pt-0">
       <Image
         src="/icons/logo.svg"
         alt="The Defiant"
@@ -22,7 +22,7 @@ const SideContent = () => {
       </Heading>
       <ul className="mt-2">
         {sideContentData.map((sideItem, index) => (
-          <li className="my-8" key={index}>
+          <li className="my-8 flex flex-row" key={index}>
             <SideItem {...sideItem} />
           </li>
         ))}

@@ -10,12 +10,20 @@ import { FormField } from "@/components/molecules/form-fields";
 import { Text } from "@/components/atoms/text";
 import { Heading } from "@/components/atoms/heading";
 import FormDescription from "./form-description";
+import { useRouter } from "next/router";
 
 const ResetPasswordForm = () => {
+  //change for the correct token
   const token = "";
+  const router = useRouter();
   const [onSubmitError, setOnSubmitError] = useState<string>("");
-  const [successView, setSuccessView] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [successView, setSuccessView] = useState<boolean>(false);
+
+  const returnToLogin = () => {
+    router.replace("/login", undefined, { shallow: true });
+  };
+
   return (
     <div className="h-full w-full md:px-6 lg:px-0 bg-white text-center">
       <Formik
@@ -77,12 +85,12 @@ const ResetPasswordForm = () => {
           return (
             <Form>
               {!successView ? (
-                <div className="my-6 md:h-full md:w-full">
+                <div className="my-6 md:h-full md:w-full flex flex-col gap-6">
                   <FormDescription
                     title="Create a New Password"
                     content="You won’t be able to re-use your old password so try and come up with something you’ll remember."
                   />
-                  <div className="mt-6 relative">
+                  <div className="relative">
                     <label className="text-left">
                       <Heading size="sm">Email</Heading>
                     </label>
@@ -90,6 +98,7 @@ const ResetPasswordForm = () => {
                       type="email"
                       disabled={true}
                       className="w-full mt-1 bg-[#CCCDD2] py-2 rounded px-4 font-body focus:outline-none"
+                      //change for the correct placeholder
                       placeholder="eddie@thedefiant.io"
                     />
                     <Image
@@ -125,7 +134,7 @@ const ResetPasswordForm = () => {
                   </div>
                   <Button
                     title={`Reset${loading ? "ting" : ""} Password`}
-                    className={`mt-6 ${loading ? "opacity-50" : ""}`}
+                    className={` ${loading ? "opacity-50" : ""}`}
                   />
                 </div>
               ) : (
@@ -134,7 +143,11 @@ const ResetPasswordForm = () => {
                     title="Password Reset"
                     content="Your new password is saved to your account so make sure you remember it and update any password managers."
                   />
-                  <Button title="Return to Login" className="mt-6" />
+                  <Button
+                    title="Return to Login"
+                    className="mt-6"
+                    handleClick={returnToLogin}
+                  />
                 </div>
               )}
             </Form>

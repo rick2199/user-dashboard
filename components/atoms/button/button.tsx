@@ -28,6 +28,7 @@ const Button: React.FC<ButtonProps> = ({
         <button
           disabled={disabled}
           type={type}
+          onClick={handleClick}
           className={`w-full ${
             disabled
               ? "bg-[#CCCDD2] text-[#050505]"

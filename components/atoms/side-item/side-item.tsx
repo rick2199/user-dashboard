@@ -19,9 +19,9 @@ const SideItem: React.FC<SideItemProps> = ({
         alt={iconName}
         width={40}
         height={40}
-        className="align-top w-10 inline-block"
+        className="align-top flex-none w-10"
       />
-      <div className="ml-4 inline-block max-w-[240px] lg:max-w-[368px]">
+      <div className="ml-4">
         <Heading>{title}</Heading>
         <p className="text-text-inverse-light">{description}</p>
       </div>

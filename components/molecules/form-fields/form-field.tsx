@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ErrorMessage, Field } from "formik";
 import { Heading } from "@/components/atoms/heading";
 import { Text } from "@/components/atoms/text";
+import { useRouter } from "next/router";
 
 interface FormFieldProps {
   label: string;
@@ -10,11 +11,18 @@ interface FormFieldProps {
   error: string;
   type: string;
   isRequired?: boolean;
+  placeHolder?: string;
 }
 
 const MigrateError = () => {
+  const router = useRouter();
   return (
-    <button className="text-text-light">
+    <button
+      className="text-text-light"
+      onClick={() => {
+        router.replace("/login", undefined, { shallow: true });
+      }}
+    >
       You need to migrate your account first,{" "}
       <span className="underline"> click here.</span>
     </button>
@@ -27,6 +35,7 @@ const FormField: React.FC<FormFieldProps> = ({
   error,
   isRequired,
   type,
+  placeHolder,
 }) => {
   const input =
     typeof window !== "undefined"
@@ -48,19 +57,23 @@ const FormField: React.FC<FormFieldProps> = ({
     }
   };
   return (
-    <div className={`relative mt-6 flex flex-col gap-1 !text-left`}>
+    <div className={`relative flex flex-col gap-1 !text-left`}>
       <label className="flex justify-between">
         <Heading size="sm">{label}</Heading>
         {isRequired && <Text className="text-text-light">required</Text>}
       </label>
       <Field
         type={
-          (type === "username" && "text") ||
+          (type === "userName" && "text") ||
           (type === "email" ? "email" : "password")
         }
         placeholder={`${
-          (type === "username" && "Enter a username") ||
-          (type === "email" ? "youremail@domain.com" : "Enter your password")
+          placeHolder
+            ? placeHolder
+            : (type === "userName" && "Enter a username") ||
+              (type === "email"
+                ? "youremail@domain.com"
+                : "Enter your password")
         }`}
         id={`${type}id`}
         className={`w-full rounded border-2 bg-neutral-100 py-2 px-4 font-body ${
