@@ -21,7 +21,7 @@ const MigrateError = () => {
     <button
       className="text-text-light"
       onClick={() => {
-        router.replace("/login", undefined, { shallow: true });
+        router.push("/login");
       }}
     >
       You need to migrate your account first,{" "}
@@ -122,11 +122,19 @@ const FormField: React.FC<FormFieldProps> = ({
             width={24}
           />
         </a>
+      ) : touched && error ? (
+        <Image
+          src={`/icons/error-icon.svg`}
+          className="absolute top-9 right-2"
+          alt="eye-icon"
+          height={24}
+          width={24}
+        />
       ) : (
         touched &&
-        error && (
+        !error && (
           <Image
-            src={`/icons/error-icon.svg`}
+            src={`/icons/success-icon.svg`}
             className="absolute top-9 right-2"
             alt="eye-icon"
             height={24}
