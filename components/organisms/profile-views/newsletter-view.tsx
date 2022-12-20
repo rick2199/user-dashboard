@@ -6,17 +6,35 @@ import React, { useContext, useEffect, useState } from "react";
 import { NewsletterList } from "@/components/molecules/newsletter";
 
 interface NewsletterViewProps {
-  freeLists: string[];
-  premiumLists: string[];
+  freeLists: any[];
+  premiumLists: any[];
 }
 
 const NewsletterView: React.FC<NewsletterViewProps> = ({
-  freeLists,
   premiumLists,
+  freeLists,
 }) => {
   const [data, setData] = useState<any>(null);
+  console.log(freeLists);
+  const freeListsFiltered = freeLists.filter(
+    (i) => i.categoryWP === "defi-daily"
+  );
+  const premiumDefiDaily = premiumLists.find(
+    (i) => i.categoryWP === "defi-daily"
+  );
+  const premiumListsFiltered = premiumLists.filter(
+    (i) => i.categoryWP !== "defi-daily"
+  );
 
-  const { token } = useContext(UserContext);
+  console.log({ freeListsFiltered });
+
+  const { token, user } = useContext(UserContext);
+  const defiDailyListId =
+    user?.role === "PREMIUM"
+      ? premiumDefiDaily.listId
+      : freeListsFiltered[0].listId;
+
+  const isSub = data?.listsOwned.includes(defiDailyListId);
 
   useEffect(() => {
     let fetched = false;
@@ -35,7 +53,7 @@ const NewsletterView: React.FC<NewsletterViewProps> = ({
       fetchNewsletterData();
     }
   }, [token]);
-
+  console.log({ data });
   return (
     <div>
       <Heading className="text-center text-4xl lg:text-left lg:text-[40px] lg:leading-[48px]">
@@ -47,15 +65,15 @@ const NewsletterView: React.FC<NewsletterViewProps> = ({
         <Text className="text-text-default-light">
           Stay up to date with our free newsletters available to all users.
         </Text>
-        {freeLists.map((item: any) => {
+        {freeListsFiltered.map((item: any) => {
           return (
             <NewsletterList
               token={token as string}
-              listId={item.listId}
+              listId={defiDailyListId}
               key={item.id}
               frequency={item.frequency}
               title={item.name}
-              listsOwned={data?.listsOwned}
+              listsOwned={isSub ? [defiDailyListId] : []}
               categoryWP={item.categoryWP}
             />
           );
@@ -66,7 +84,7 @@ const NewsletterView: React.FC<NewsletterViewProps> = ({
         <Text className="text-text-default-light">
           As a subscriber, you have access to the newsletters below.
         </Text>
-        {premiumLists.map((item: any) => {
+        {premiumListsFiltered.map((item: any) => {
           return (
             <NewsletterList
               token={token as string}

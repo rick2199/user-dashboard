@@ -42,7 +42,7 @@ const NewsletterList: React.FC<NewsletterListProps> = ({
     }
   };
 
-  const imageName = title.split(" ").join("-").toLowerCase();
+  const imageName = categoryWP.toLowerCase();
 
   return (
     <div className="relative mt-12 flex gap-4">
@@ -57,9 +57,13 @@ const NewsletterList: React.FC<NewsletterListProps> = ({
         <Heading size="xs">{title}</Heading>
         <Text className="text-sm md:text-base">
           {frequency} |{" "}
-          <Link href={`/category/${categoryWP}`}>
+          <a
+            target="_blank"
+            href={`${process.env.NEXT_PUBLIC_BLOG_URL_URL}/newsletter`}
+            rel="noreferrer"
+          >
             <span className="cursor-pointer underline">See Lastest</span>
-          </Link>
+          </a>
         </Text>
       </div>
       {listsOwned ? (

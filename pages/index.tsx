@@ -113,14 +113,11 @@ const Profile: React.FC<ProfileProps> = ({ data }) => {
   const handleTabChange = async (title: string) => {
     if (title !== "Subscription") return;
 
-    const { data } = await axios.get(
-      `${process.env.NEXT_PUBLIC_BLOG_URL_URL}/api/auth/create-management-link`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const { data } = await axios.get(`/api/auth/create-management-link`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     window.location.href = data;
   };
