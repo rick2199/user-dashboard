@@ -57,10 +57,9 @@ const ForgotPasswordForm = () => {
                 setOnSubmitError("Internal Server Error");
               }
             } finally {
-              setLoading(true);
+              setLoading(false);
             }
           }
-          setTimeout(() => setOnSubmitError(""), 5000);
         }}
       >
         {({ errors, touched }) => {
@@ -75,6 +74,7 @@ const ForgotPasswordForm = () => {
                   />
                   <div className="relative">
                     <FormField
+                      setOnSubmitError={setOnSubmitError}
                       label="Email"
                       type="email"
                       error={errors.email as string}

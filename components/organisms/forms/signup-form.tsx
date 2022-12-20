@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import Image from "next/image";
 import { Formik, Form } from "formik";
 import { AxiosError } from "axios";
-import Link from "next/link";
 import { emailRegex, passwordRegex, usernameRegex } from "@/utils";
 import { keccak } from "@/utils/sha256";
 import authClient from "@/lib/authClient";
@@ -10,12 +8,16 @@ import { Button } from "@/components/atoms/button";
 import { FormField } from "@/components/molecules/form-fields";
 import { CheckBoxField } from "@/components/molecules/form-fields";
 import { Text } from "@/components/atoms/text";
-import { Heading } from "@/components/atoms/heading";
+import { useRouter } from "next/router";
+import FormDescription from "./form-description";
+import { FormInfo } from "@/components/molecules/form-info";
 
 const SignupForm = () => {
   const [onSubmitError, setOnSubmitError] = useState<string>("");
   const [isEmailSent, setEmailSent] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
+  const redirectUri = router.query.redirect_uri;
   return (
     <div className=" w-full md:px-6 lg:px-0 bg-white text-center">
       {!isEmailSent ? (
@@ -96,6 +98,7 @@ const SignupForm = () => {
                 //GENERATE JWT
                 setEmailSent(true);
                 resetForm();
+                localStorage.setItem("redirectUri", redirectUri as string);
               }
             } catch (err) {
               console.log(err);
@@ -121,8 +124,7 @@ const SignupForm = () => {
                 setOnSubmitError("Internal Server Error");
               }
             } finally {
-              setLoading(true);
-              setTimeout(() => setOnSubmitError(""), 5000);
+              setLoading(false);
             }
           }}
         >
@@ -133,15 +135,11 @@ const SignupForm = () => {
               !!values.password &&
               !!values.terms &&
               !!values.userName;
-
-            console.log({ values });
-
-            console.log({ isCompleted });
-
             return (
               <Form>
                 <div className="mt-8 md:h-full md:w-full">
                   <FormField
+                    setOnSubmitError={setOnSubmitError}
                     label="Email"
                     type="email"
                     error={errors.email as string}
@@ -160,6 +158,7 @@ const SignupForm = () => {
                     "You need to migrate your account first, click here" && (
                     <div className="my-6 flex flex-col gap-6">
                       <FormField
+                        setOnSubmitError={setOnSubmitError}
                         label="Username"
                         type="userName"
                         error={errors.userName as string}
@@ -167,6 +166,7 @@ const SignupForm = () => {
                         isRequired={true}
                       />
                       <FormField
+                        setOnSubmitError={setOnSubmitError}
                         label="Password"
                         type="password"
                         error={errors.password as string}
@@ -174,6 +174,7 @@ const SignupForm = () => {
                         isRequired={true}
                       />
                       <FormField
+                        setOnSubmitError={setOnSubmitError}
                         label="Confirm Password"
                         type="confirmPassword"
                         error={errors.confirmPassword as string}
@@ -216,46 +217,13 @@ const SignupForm = () => {
         </Formik>
       ) : (
         <div className="mt-8">
-          <Heading as="h3" size="md" className="mb-2">
-            Check your inbox
-          </Heading>
-          <Text>
-            You are only one step away! You should have received an email. Click
-            on the link provided and you’ll be able to activate your account.
-          </Text>
-          <div className="mt-10 flex flex-row gap-1 text-left text-text-light">
-            <div className="flex-none">
-              <Image
-                src="/icons/icon-help.svg"
-                height={24}
-                width={24}
-                alt="thedefiant-help"
-              />
-            </div>
-            <span className="text-sm">
-              Still not received the email? Maybe it’s something we did. Reach
-              out to us on our{" "}
-              <a
-                href="https://discord.com/invite/thedefiant"
-                target="__blank"
-                className="text-[#0000FF] underline"
-              >
-                Discord
-              </a>{" "}
-              or send us an{" "}
-              <a
-                href="mailto:admin@thedefiant.io"
-                target="__blank"
-                className="text-[#0000FF] underline"
-              >
-                email
-              </a>
-              .
-            </span>
-          </div>
-          <Link className="mt-5 w-full bg-[#CAFCE6] py-3" href="/login">
-            Return to Login
-          </Link>
+          <FormDescription
+            title="Check your inbox"
+            content="You are only one step away! You should have received an email. Click
+            on the link provided and you’ll be able to activate your account."
+          />
+          <FormInfo />
+          <Button disabled={false} title="Return to Login" />
         </div>
       )}
     </div>

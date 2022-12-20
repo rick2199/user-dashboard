@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import Image from "next/image";
 import { ErrorMessage, Field } from "formik";
 import { Heading } from "@/components/atoms/heading";
@@ -12,6 +12,7 @@ interface FormFieldProps {
   type: string;
   isRequired?: boolean;
   placeHolder?: string;
+  setOnSubmitError: Dispatch<SetStateAction<string>>;
 }
 
 const MigrateError = () => {
@@ -36,7 +37,11 @@ const FormField: React.FC<FormFieldProps> = ({
   isRequired,
   type,
   placeHolder,
+  setOnSubmitError,
 }) => {
+  if (error) {
+    setOnSubmitError("");
+  }
   const input =
     typeof window !== "undefined"
       ? (document?.getElementById(

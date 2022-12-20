@@ -11,9 +11,11 @@ import { useState } from "react";
 import Link from "next/link";
 
 const LoginForm = () => {
-  const router = useRouter();
   const [onSubmitError, setOnSubmitError] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const redirectUri = router.query.redirect_uri;
+  const storagedUri = localStorage.getItem("redirectUri");
 
   const onSubmit = async (
     {
@@ -56,9 +58,15 @@ const LoginForm = () => {
         localStorage.setItem("token", data.token);
         console.log("success");
         resetForm();
-        if (localStorage.getItem("email")) {
-          localStorage.removeItem("email");
-          router.replace("/profile", undefined, { shallow: true });
+        if (redirectUri) {
+          window.location.replace(decodeURIComponent(redirectUri as string));
+        }
+        if (storagedUri) {
+          window.location.replace(storagedUri);
+        } else {
+          window.location.replace(
+            process.env.NEXT_PUBLIC_LOCAL_SITE_URL as string
+          );
         }
       }
     } catch (err) {
@@ -73,13 +81,20 @@ const LoginForm = () => {
         ((err as AxiosError).response?.data as any)?.message ===
         "User not activated"
       ) {
-        setOnSubmitError("User not activated");
+        setOnSubmitError(
+          "Your account has not been activated, please check your inbox"
+        );
+      }
+      if (
+        ((err as AxiosError).response?.data as any)?.message ===
+        "Invalid Login Details"
+      ) {
+        setOnSubmitError("Please check your credentials");
       }
       if (((err as AxiosError).response?.data as any)?.code === 500) {
         setOnSubmitError("Internal Server Error");
       }
     }
-    setTimeout(() => setOnSubmitError(""), 5000);
     setLoading(false);
   };
   return (
@@ -126,6 +141,7 @@ const LoginForm = () => {
           return (
             <Form className="relative flex flex-col gap-6 text-center">
               <FormField
+                setOnSubmitError={setOnSubmitError}
                 label="Email or Username"
                 type="userName"
                 placeHolder="Enter your email or username"
@@ -136,12 +152,13 @@ const LoginForm = () => {
                 "You need to migrate your account first, click here" && (
                 <div>
                   <FormField
+                    setOnSubmitError={setOnSubmitError}
                     label="Password"
                     type="password"
                     error={errors.password as string}
                     touched={touched.password as boolean}
                   />
-                  <div className=" mt-1 flex flex-row items-center justify-between">
+                  <div className=" mt-1 flex flex-row items-start justify-between">
                     {onSubmitError && (
                       <Text className="text-left text-[#FB2834]">
                         {onSubmitError}
@@ -153,7 +170,7 @@ const LoginForm = () => {
                         errors.password && touched.password ? "mt-4" : ""
                       }`}
                     >
-                      <Text className="pt-1 text-end underline">
+                      <Text className="pt-1 w-max text-end underline">
                         I need help
                       </Text>
                     </Link>

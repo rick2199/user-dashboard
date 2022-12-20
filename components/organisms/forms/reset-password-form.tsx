@@ -75,7 +75,7 @@ const ResetPasswordForm = () => {
               setOnSubmitError("Internal Server Error");
             }
           } finally {
-            setTimeout(() => setOnSubmitError(""), 5000);
+            setLoading(false);
             setSuccessView(true);
             resetForm();
           }
@@ -110,12 +110,14 @@ const ResetPasswordForm = () => {
                     />
                   </div>
                   <FormField
+                    setOnSubmitError={setOnSubmitError}
                     label="Create New Password"
                     type="password"
                     error={errors.password as string}
                     touched={touched.password as boolean}
                   />
                   <FormField
+                    setOnSubmitError={setOnSubmitError}
                     label="Confirm New Password"
                     type="confirmPassword"
                     error={errors.confirmPassword as string}
