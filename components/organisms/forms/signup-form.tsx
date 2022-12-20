@@ -223,7 +223,11 @@ const SignupForm = () => {
             on the link provided and you’ll be able to activate your account."
           />
           <FormInfo />
-          <Button disabled={false} title="Return to Login" />
+          <Button
+            handleClick={() => router.push("/login")}
+            disabled={false}
+            title="Return to Login"
+          />
         </div>
       )}
     </div>

@@ -15,7 +15,6 @@ const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const redirectUri = router.query.redirect_uri;
-  const storagedUri = localStorage.getItem("redirectUri");
 
   const onSubmit = async (
     {
@@ -35,7 +34,6 @@ const LoginForm = () => {
     setLoading(true);
     const clientHash = keccak(256)(password);
     const isEmail = userName.includes("@");
-    console.log({ isEmail });
 
     try {
       const { data, status } = await authClient({
@@ -61,6 +59,7 @@ const LoginForm = () => {
         if (redirectUri) {
           window.location.replace(decodeURIComponent(redirectUri as string));
         }
+        const storagedUri = localStorage.getItem("redirectUri");
         if (storagedUri) {
           window.location.replace(storagedUri);
         } else {
@@ -107,7 +106,7 @@ const LoginForm = () => {
         validate={async ({ userName, password }) => {
           const errors: any = {};
           if (!userName) {
-            errors.email = "Please enter an email or userName";
+            errors.userName = "Please enter an email or username";
           }
           if (userName && userName.includes("@")) {
             try {
@@ -117,7 +116,7 @@ const LoginForm = () => {
               });
 
               if (!res.data.data.valid) {
-                errors.email =
+                errors.userName =
                   "You need to migrate your account first, click here";
               }
             } catch (error) {
