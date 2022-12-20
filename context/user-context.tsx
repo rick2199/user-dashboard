@@ -98,10 +98,10 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [token, fetchUser, user]);
 
-  const logout = () => {
+  const logout = async () => {
     setUser(null);
     setToken(null);
-    localStorage.removeItem("token");
+    await axios.get("/api/auth/logout");
     router.replace("/", undefined, { shallow: false });
   };
 
