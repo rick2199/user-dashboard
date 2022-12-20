@@ -15,7 +15,6 @@ const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const redirectUri = router.query.redirect_uri;
-  const storagedUri = localStorage.getItem("redirectUri");
 
   const onSubmit = async (
     {
@@ -61,12 +60,12 @@ const LoginForm = () => {
         if (redirectUri) {
           window.location.replace(decodeURIComponent(redirectUri as string));
         }
+        const storagedUri = localStorage.getItem("redirectUri");
+
         if (storagedUri) {
           window.location.replace(storagedUri);
         } else {
-          window.location.replace(
-            process.env.NEXT_PUBLIC_LOCAL_SITE_URL as string
-          );
+          router.replace("/", undefined, { shallow: true });
         }
       }
     } catch (err) {
