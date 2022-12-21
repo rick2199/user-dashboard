@@ -33,20 +33,26 @@ const ProfileLayout: React.FC<ProfileLayoutProps> = ({
     <>
       <header className="flex w-full flex-row items-center justify-between border-b-2 border-[#E2E3E8] p-2 lg:px-12">
         <div className="hidden lg:block">
-          <Link href="/" className="hover:cursor-pointer">
+          <a
+            href={process.env.NEXT_PUBLIC_BLOG_URL_URL}
+            className="hover:cursor-pointer"
+          >
             <Heading className="underline">Home</Heading>
-          </Link>
+          </a>
         </div>
 
         <div className="flex w-full  lg:justify-center ">
-          <Link href="/" className="hover:cursor-pointer">
+          <a
+            href={process.env.NEXT_PUBLIC_BLOG_URL_URL}
+            className="hover:cursor-pointer"
+          >
             <Image
               src="/defiant-logo-horizontal.png"
               alt="The Defiant Logo"
               width={130}
               height={32}
             />
-          </Link>
+          </a>
         </div>
 
         {isLoggedIn && user && (
