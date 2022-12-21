@@ -5,7 +5,7 @@ const nextConfig = {
     return [
       {
         source: "/api/newsletter/:path*",
-        destination: `${process.env.NEXT_PUBLIC_BLOG_URL_URL}/newsletter/:path*`,
+        destination: `${process.env.NEXT_PUBLIC_BLOG_URL_URL}/api/newsletter/:path*`,
       },
     ];
   },
