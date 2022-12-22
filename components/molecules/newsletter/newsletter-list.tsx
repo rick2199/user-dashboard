@@ -38,16 +38,21 @@ const NewsletterList: React.FC<NewsletterListProps> = ({
           `${process.env.NEXT_PUBLIC_BLOG_URL_URL}/go-premium`,
           "_blank"
         );
+        return;
       }
     }
-    const { data } = await axios({
-      method: "PUT",
-      url: "/api/newsletter/lists",
-      headers: { Authorization: `Bearer ${token}` },
-      data: { listId, remove: listsOwned.includes(listId) },
-    });
-    if (data.data === "ok") {
-      setListStatus(!hasListStatusChanged);
+    try {
+      const { data } = await axios({
+        method: "PUT",
+        url: "/api/auth/lists",
+        headers: { Authorization: `Bearer ${token}` },
+        data: { listId, remove: listsOwned.includes(listId) },
+      });
+      if (data.data === "ok") {
+        setListStatus(!hasListStatusChanged);
+      }
+    } catch (err) {
+      console.log({ err });
     }
   };
 

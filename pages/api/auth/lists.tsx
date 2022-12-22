@@ -1,5 +1,4 @@
 import authClient from "@/lib/authClient";
-import { activeCampaignDBLists } from "@/lib/activeCampaignDBLists";
 import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -56,8 +55,10 @@ const newsletterLists = async (req: NextApiRequest, res: NextApiResponse) => {
       });
     }
     if (req.method === "PUT") {
-      const { premiumListsDB } = await activeCampaignDBLists();
-      const premiumLists = premiumListsDB.map((item: any) => item.listId);
+      const { data } = await axios.get(
+        `${process.env.NEXT_PUBLIC_BLOG_URL_URL}/api/newsletter/newsletter-lists`
+      );
+      const premiumLists = data.premium.map((item: any) => item.listId);
       const listToUpdate: string[] = [];
       const urlencoded = new URLSearchParams();
       const listIds = lists.contactLists.map(

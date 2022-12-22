@@ -64,7 +64,7 @@ const ProfileLayout: React.FC<ProfileLayoutProps> = ({
               <span className="font-bold">{user?.userName}</span>
               <button
                 onClick={() => logout()}
-                className="text-text-disabled hover:underline"
+                className="text-text-disabled hover:underline w-max"
               >
                 Log out
               </button>
