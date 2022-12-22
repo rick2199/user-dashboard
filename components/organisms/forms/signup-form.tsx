@@ -135,6 +135,9 @@ const SignupForm = () => {
               !!values.password &&
               !!values.terms &&
               !!values.userName;
+
+            console.log({ errors });
+
             return (
               <Form>
                 <div className="mt-8 md:h-full md:w-full">
@@ -146,13 +149,11 @@ const SignupForm = () => {
                     touched={touched.email as boolean}
                     isRequired={true}
                   />
-                  {!errors.email ? (
+                  {!errors.email && (
                     <Text className="relative top-1 text-left">
                       Your email is never public and only used for communication
                       and account recovery.
                     </Text>
-                  ) : (
-                    <div className="pt-[46px]"></div>
                   )}
                   {errors.email !==
                     "You need to migrate your account first, click here" && (
@@ -196,7 +197,7 @@ const SignupForm = () => {
                         {onSubmitError}
                       </Text>
                     )}
-                    <div className={`mt-${onSubmitError ? "2" : "10"}`}>
+                    <div className={`${onSubmitError ? "mt-2" : ""}`}>
                       <CheckBoxField
                         error={errors.terms as string}
                         touched={touched.terms as boolean}
@@ -216,7 +217,7 @@ const SignupForm = () => {
           }}
         </Formik>
       ) : (
-        <div className="mt-8">
+        <div className="flex flex-col gap-6 mt-8">
           <FormDescription
             title="Check your inbox"
             content="You are only one step away! You should have received an email. Click

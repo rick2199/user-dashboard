@@ -7,7 +7,11 @@ interface TextProps {
   className?: string;
 }
 
-const ptSerif = PT_Serif({ style: "normal", weight: ["400", "700"] });
+const ptSerif = PT_Serif({
+  style: "normal",
+  weight: ["400", "700"],
+  subsets: ["latin"],
+});
 
 const Text: React.FC<TextProps> = ({ children, size, className }) => {
   const styles = {

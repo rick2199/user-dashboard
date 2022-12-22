@@ -82,7 +82,7 @@ const FormField: React.FC<FormFieldProps> = ({
         }`}
         id={`${type}id`}
         className={`w-full rounded border-2 bg-neutral-100 py-2 px-4 font-body ${
-          touched && error ? "border-[#FB2834]" : "focus:border-[#CAFCE6]"
+          touched && error ? "border-[#FB2834]" : "focus:border-[#27F19A]"
         } focus:outline-none`}
         name={type}
       />
@@ -91,7 +91,7 @@ const FormField: React.FC<FormFieldProps> = ({
         <ErrorMessage
           name={type}
           component={() => (
-            <Text className="absolute top-[72px] text-[#FB2834]">
+            <Text className="relative top-0 text-[#FB2834]">
               {error ===
               "You need to migrate your account first, click here" ? (
                 <MigrateError />
