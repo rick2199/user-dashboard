@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Formik, Form } from "formik";
 import { AxiosError } from "axios";
 import { passwordRegex } from "@/utils";
@@ -9,13 +9,21 @@ import { FormField } from "@/components/molecules/form-fields";
 import { Text } from "@/components/atoms/text";
 import FormDescription from "./form-description";
 import { useRouter } from "next/router";
+import { UserContext } from "@/context/user-context";
 
 const ResetPasswordForm = () => {
   const router = useRouter();
   const token = router.query.token;
   const [onSubmitError, setOnSubmitError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [successView, setSuccessView] = useState<boolean>(false);
+  const [successView, setSuccessView] = useState<boolean>(true);
+  const { logout, token: loggedInToken } = useContext(UserContext);
+
+  useEffect(() => {
+    if (loggedInToken) {
+      logout();
+    }
+  }, [logout, loggedInToken]);
 
   return (
     <div className="h-full w-full md:px-6 lg:px-0 bg-white text-center">
@@ -114,14 +122,13 @@ const ResetPasswordForm = () => {
                   />
                 </div>
               ) : (
-                <div className="mt-8 w-full">
+                <div className="mt-6 flex flex-col gap-6 w-full">
                   <FormDescription
                     title="Password Reset"
                     content="Your new password is saved to your account so make sure you remember it and update any password managers."
                   />
                   <Button
                     title="Return to Login"
-                    className="mt-6"
                     handleClick={() => router.push("/login")}
                   />
                 </div>

@@ -137,10 +137,9 @@ const MigrationForm = () => {
                       {onSubmitError}
                     </Text>
                   )}
-                  <div className=" w-full ">
-                    <FormInfo />
-                    <Button title={`Migrat${loading ? "ing" : "e"} now`} />
-                  </div>
+
+                  <FormInfo />
+                  <Button title={`Migrat${loading ? "ing" : "e"} now`} />
                 </div>
               ) : (
                 <div className="flex gap-6 flex-col">

@@ -95,9 +95,8 @@ const MigrateForm = () => {
                       {onSubmitError}
                     </Text>
                   )}
-
-                  <div className="">
-                    <FormInfo />
+                  <FormInfo />
+                  <div>
                     <Button title={`Migrat${loading ? "ing" : "e"}`} />
                     <Button
                       handleClick={() => router.push("/signup")}
@@ -108,7 +107,7 @@ const MigrateForm = () => {
                   </div>
                 </div>
               ) : (
-                <div className="mt-8">
+                <div className="flex flex-col gap-6">
                   <FormDescription
                     title="Check your inbox"
                     content=" You should have received an email. Click on the link

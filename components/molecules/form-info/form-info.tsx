@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const FormInfo = () => {
   return (
-    <div className="my-6 flex flex-row items-start gap-3 text-left text-text-light bg-[#FEFCEC] p-4">
+    <div className="flex flex-row items-start gap-3 text-left text-text-light bg-[#FEFCEC] p-4">
       <Image
         src="/icons/info-icon.svg"
         height={24}

@@ -29,17 +29,38 @@ const SignupForm = () => {
             confirmPassword: "",
             terms: false,
           }}
-          validate={async ({
-            email,
-            password,
-            confirmPassword,
-            terms,
-            userName,
-          }) => {
+          validate={async ({ email }) => {
             const errors: any = {};
+
+            if (email && emailRegex.test(email)) {
+              try {
+                const res = await authClient({
+                  url: `/is_email_valid/${email}`,
+                });
+
+                if (!res.data.data.valid) {
+                  errors.email =
+                    "You need to migrate your account first, click here";
+                }
+              } catch (error) {
+                // ignore error
+                console.error(error);
+              }
+            }
+            return errors;
+          }}
+          onSubmit={async (
+            { userName, password, email, confirmPassword, terms },
+            { resetForm, setErrors }
+          ) => {
+            const errors: any = {};
+
+            setLoading(true);
             if (!userName) {
               errors.userName = "Please enter a username";
             } else if (!usernameRegex.test(userName)) {
+              errors.userName = "This isn’t a valid username";
+            } else if (userName.length <= 2) {
               errors.userName = "This isn’t a valid username";
             }
             if (!email) {
@@ -78,10 +99,12 @@ const SignupForm = () => {
               errors.terms = "Please select the option";
             }
 
-            return errors;
-          }}
-          onSubmit={async ({ userName, password, email }, { resetForm }) => {
-            setLoading(true);
+            if (Object.keys(errors).length >= 1) {
+              console.log(Object.keys(errors));
+              setErrors(errors);
+              setLoading(false);
+              return;
+            }
             const clientHash = keccak(256)(password);
             try {
               const { data } = await authClient({
@@ -106,13 +129,13 @@ const SignupForm = () => {
                 ((err as AxiosError).response?.data as any)?.message ===
                 "Email is already registered"
               ) {
-                setOnSubmitError("Email is already registered");
+                setErrors({ email: "Email is already registered" });
               }
               if (
                 ((err as AxiosError).response?.data as any)?.message ===
                 "Username is taken"
               ) {
-                setOnSubmitError("Username is taken");
+                setErrors({ userName: "Username is taken" });
               }
               if (
                 ((err as AxiosError).response?.data as any)?.message ===
@@ -135,6 +158,9 @@ const SignupForm = () => {
               !!values.password &&
               !!values.terms &&
               !!values.userName;
+
+            console.log({ errors });
+
             return (
               <Form>
                 <div className="mt-8 md:h-full md:w-full">
@@ -146,13 +172,11 @@ const SignupForm = () => {
                     touched={touched.email as boolean}
                     isRequired={true}
                   />
-                  {!errors.email ? (
+                  {!errors.email && (
                     <Text className="relative top-1 text-left">
                       Your email is never public and only used for communication
                       and account recovery.
                     </Text>
-                  ) : (
-                    <div className="pt-[46px]"></div>
                   )}
                   {errors.email !==
                     "You need to migrate your account first, click here" && (
@@ -196,13 +220,31 @@ const SignupForm = () => {
                         {onSubmitError}
                       </Text>
                     )}
-                    <div className={`mt-${onSubmitError ? "2" : "10"}`}>
+                    <div className={`${onSubmitError ? "mt-2" : ""}`}>
                       <CheckBoxField
                         error={errors.terms as string}
                         touched={touched.terms as boolean}
-                        content="By signing up I accept The Defiant’s Privacy Policy & Terms and
-              Conditions."
-                      />
+                      >
+                        By signing up I accept The Defiant’s{" "}
+                        <a
+                          target="_blank"
+                          href={`${process.env.NEXT_PUBLIC_BLOG_URL_URL}/privacy-policy`}
+                          rel="noreferrer"
+                          className="underline"
+                        >
+                          Privacy Policy
+                        </a>{" "}
+                        &{" "}
+                        <a
+                          target="_blank"
+                          href={`${process.env.NEXT_PUBLIC_BLOG_URL_URL}/terms-conditions`}
+                          rel="noreferrer"
+                          className="underline"
+                        >
+                          Terms and Conditions
+                        </a>
+                        .
+                      </CheckBoxField>
                     </div>
                   </div>
                 )}
@@ -216,7 +258,7 @@ const SignupForm = () => {
           }}
         </Formik>
       ) : (
-        <div className="mt-8">
+        <div className="flex flex-col gap-6 mt-8">
           <FormDescription
             title="Check your inbox"
             content="You are only one step away! You should have received an email. Click

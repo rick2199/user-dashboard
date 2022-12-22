@@ -90,11 +90,10 @@ const ForgotPasswordForm = () => {
                   <Button
                     title={`Send${loading ? "ing" : ""} reset link`}
                     disabled={false}
-                    className="mt-6"
                   />
                 </>
               ) : (
-                <div>
+                <div className="flex flex-col gap-6">
                   <FormDescription
                     title="Email Sent"
                     content="You should have recieved an email if you have an account registered with us. Click on the link provided and you’ll be able to reset your password."

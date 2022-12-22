@@ -1,9 +1,10 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { Heading } from "@/components/atoms/heading";
 import { Text } from "@/components/atoms/text";
 import Link from "next/link";
+import { UserContext } from "@/context/user-context";
 
 interface NewsletterListProps {
   title: string;
@@ -23,7 +24,7 @@ const NewsletterList: React.FC<NewsletterListProps> = ({
   categoryWP,
 }) => {
   const [hasListStatusChanged, setListStatus] = useState<boolean>(false);
-
+  const { user } = useContext(UserContext);
   useEffect(() => {
     if (listsOwned && listsOwned.includes(listId)) {
       setListStatus(true);
@@ -31,6 +32,14 @@ const NewsletterList: React.FC<NewsletterListProps> = ({
   }, [listId, listsOwned]);
 
   const handleClick = async () => {
+    if (user?.role === "FREE") {
+      if (typeof window !== "undefined") {
+        window.open(
+          `${process.env.NEXT_PUBLIC_BLOG_URL_URL}/go-premium`,
+          "_blank"
+        );
+      }
+    }
     const { data } = await axios({
       method: "PUT",
       url: "/api/newsletter/lists",

@@ -12,7 +12,7 @@ interface ButtonProps {
   disabled?: boolean;
 }
 
-const sora = Sora({ style: "normal" });
+const sora = Sora({ subsets: ["latin"] });
 
 const Button: React.FC<ButtonProps> = ({
   variant = "primary",
@@ -32,8 +32,8 @@ const Button: React.FC<ButtonProps> = ({
           className={`w-full ${
             disabled
               ? "bg-[#CCCDD2] text-[#050505]"
-              : "bg-[#CAFCE6] text-[#11623F]"
-          }  py-[10px] !text-xl ${className ? className : ""}`}
+              : "bg-[#CAFCE6] text-[#11623F] hover:bg-[#8CF8C9]"
+          }  py-[10px] rounded-md !text-xl ${className ? className : ""}`}
         >
           <Heading className={sora.className} size="sm">
             {title}
