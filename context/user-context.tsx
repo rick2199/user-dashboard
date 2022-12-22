@@ -101,7 +101,9 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
   const logout = async () => {
     setUser(null);
     setToken(null);
-    await axios.get("/api/auth/logout");
+    await axios.get(`${process.env.NEXT_PUBLIC_AUTH_API_URL}/logout`, {
+      withCredentials: true,
+    });
     router.replace("/", undefined, { shallow: false });
   };
 

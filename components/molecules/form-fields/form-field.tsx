@@ -91,7 +91,7 @@ const FormField: React.FC<FormFieldProps> = ({
         <ErrorMessage
           name={type}
           component={() => (
-            <Text className="relative top-0 text-[#FB2834]">
+            <Text className="text-[#FB2834]">
               {error ===
               "You need to migrate your account first, click here" ? (
                 <MigrateError />
@@ -131,16 +131,7 @@ const FormField: React.FC<FormFieldProps> = ({
           width={24}
         />
       ) : (
-        touched &&
-        !error && (
-          <Image
-            src={`/icons/success-icon.svg`}
-            className="absolute top-9 right-2"
-            alt="eye-icon"
-            height={24}
-            width={24}
-          />
-        )
+        <></>
       )}
     </div>
   );
