@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import Image from "next/image";
+import React, { useContext, useEffect, useState } from "react";
 import { Formik, Form } from "formik";
 import { AxiosError } from "axios";
 import { passwordRegex } from "@/utils";
@@ -8,21 +7,23 @@ import authClient from "@/lib/authClient";
 import { Button } from "@/components/atoms/button";
 import { FormField } from "@/components/molecules/form-fields";
 import { Text } from "@/components/atoms/text";
-import { Heading } from "@/components/atoms/heading";
 import FormDescription from "./form-description";
 import { useRouter } from "next/router";
+import { UserContext } from "@/context/user-context";
 
 const ResetPasswordForm = () => {
-  //change for the correct token
-  const token = "";
   const router = useRouter();
+  const token = router.query.token;
   const [onSubmitError, setOnSubmitError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [successView, setSuccessView] = useState<boolean>(false);
+  const [successView, setSuccessView] = useState<boolean>(true);
+  const { logout, token: loggedInToken } = useContext(UserContext);
 
-  const returnToLogin = () => {
-    router.replace("/login", undefined, { shallow: true });
-  };
+  useEffect(() => {
+    if (loggedInToken) {
+      logout();
+    }
+  }, [logout, loggedInToken]);
 
   return (
     <div className="h-full w-full md:px-6 lg:px-0 bg-white text-center">
@@ -90,25 +91,6 @@ const ResetPasswordForm = () => {
                     title="Create a New Password"
                     content="You won’t be able to re-use your old password so try and come up with something you’ll remember."
                   />
-                  <div className="relative">
-                    <label className="text-left">
-                      <Heading size="sm">Email</Heading>
-                    </label>
-                    <input
-                      type="email"
-                      disabled={true}
-                      className="w-full mt-1 bg-[#CCCDD2] py-2 rounded px-4 font-body focus:outline-none"
-                      //change for the correct placeholder
-                      placeholder="eddie@thedefiant.io"
-                    />
-                    <Image
-                      src="/icons/lock-icon.svg"
-                      className="absolute top-9 right-2"
-                      alt="lock-icon"
-                      height={24}
-                      width={24}
-                    />
-                  </div>
                   <FormField
                     setOnSubmitError={setOnSubmitError}
                     label="Create New Password"
@@ -140,15 +122,14 @@ const ResetPasswordForm = () => {
                   />
                 </div>
               ) : (
-                <div className="mt-8 w-full">
+                <div className="mt-6 flex flex-col gap-6 w-full">
                   <FormDescription
                     title="Password Reset"
                     content="Your new password is saved to your account so make sure you remember it and update any password managers."
                   />
                   <Button
                     title="Return to Login"
-                    className="mt-6"
-                    handleClick={returnToLogin}
+                    handleClick={() => router.push("/login")}
                   />
                 </div>
               )}

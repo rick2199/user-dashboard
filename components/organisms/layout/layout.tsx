@@ -8,11 +8,11 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="flex h-screen flex-col md:flex-row ">
-      <aside className="max-w-[560px] h-full md:basis-[40%] bg-darkBg">
+      <aside className="mb-10 md:mb-0 max-w-[560px] h-full md:basis-[40%] bg-darkBg">
         <SideContent />
       </aside>
-      <main className="lg:w-[384px] p-10  m-0 md:py-20  md:overflow-y-auto md:basis-[60%]">
-        <div className="mx-auto max-w-sm">
+      <main className=" p-10 m-0 md:grid md:place-items-center md:overflow-y-auto md:basis-[60%]">
+        <div className="mx-auto max-w-sm lg:w-[384px]">
           <Image
             src="/icons/logo.svg"
             alt="The Defiant"

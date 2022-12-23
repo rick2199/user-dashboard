@@ -21,7 +21,7 @@ const MigrateError = () => {
     <button
       className="text-text-light"
       onClick={() => {
-        router.replace("/login", undefined, { shallow: true });
+        router.push("/login");
       }}
     >
       You need to migrate your account first,{" "}
@@ -82,7 +82,7 @@ const FormField: React.FC<FormFieldProps> = ({
         }`}
         id={`${type}id`}
         className={`w-full rounded border-2 bg-neutral-100 py-2 px-4 font-body ${
-          touched && error ? "border-[#FB2834]" : "focus:border-[#CAFCE6]"
+          touched && error ? "border-[#FB2834]" : "focus:border-[#27F19A]"
         } focus:outline-none`}
         name={type}
       />
@@ -91,7 +91,7 @@ const FormField: React.FC<FormFieldProps> = ({
         <ErrorMessage
           name={type}
           component={() => (
-            <Text className="absolute top-[72px] text-[#FB2834]">
+            <Text className="text-[#FB2834]">
               {error ===
               "You need to migrate your account first, click here" ? (
                 <MigrateError />
@@ -122,17 +122,16 @@ const FormField: React.FC<FormFieldProps> = ({
             width={24}
           />
         </a>
+      ) : touched && error ? (
+        <Image
+          src={`/icons/error-icon.svg`}
+          className="absolute top-9 right-2"
+          alt="eye-icon"
+          height={24}
+          width={24}
+        />
       ) : (
-        touched &&
-        error && (
-          <Image
-            src={`/icons/error-icon.svg`}
-            className="absolute top-9 right-2"
-            alt="eye-icon"
-            height={24}
-            width={24}
-          />
-        )
+        <></>
       )}
     </div>
   );

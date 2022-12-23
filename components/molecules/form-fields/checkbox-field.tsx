@@ -5,14 +5,16 @@ import { Text } from "@/components/atoms/text";
 
 interface CheckBoxFieldProps {
   error: string;
-  content: string;
+  content?: string;
   touched: boolean;
+  children: React.ReactNode;
 }
 
 const CheckBoxField: React.FC<CheckBoxFieldProps> = ({
   error,
   content,
   touched,
+  children,
 }) => {
   const [isTermsChecked, setTermsCheck] = useState<boolean>(false);
   const termsInput =
@@ -28,7 +30,7 @@ const CheckBoxField: React.FC<CheckBoxFieldProps> = ({
         checked={isTermsChecked}
         onClick={() => setTermsCheck(!isTermsChecked)}
         id="terms"
-        className={`relative top-1 basis-[10%] md:basis-[7%] h-5 w-5 appearance-none border-2 ${
+        className={`relative top-1 h-5 w-5 flex-none appearance-none border-2 ${
           error && touched ? "border-[#FB2834]" : "border-[#484D57]"
         } ${
           termsInput?.checked
@@ -49,7 +51,7 @@ const CheckBoxField: React.FC<CheckBoxFieldProps> = ({
         size="sm"
         className={`${error && touched ? "text-[#FB2834]" : ""} text-left`}
       >
-        {content}
+        {content ? content : children}
       </Text>
     </label>
   );

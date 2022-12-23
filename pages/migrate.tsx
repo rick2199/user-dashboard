@@ -1,11 +1,10 @@
-import { FormTabs } from "@/components/organisms/form-tabs";
-import { LoginForm } from "@/components/organisms/forms";
+import { MigrateForm } from "@/components/organisms/forms";
 import { Layout } from "@/components/organisms/layout";
 import { UserContext } from "@/context/user-context";
 import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 
-const Login = () => {
+const Migrate = () => {
   const { isLoggedIn } = useContext(UserContext);
   const router = useRouter();
   useEffect(() => {
@@ -15,10 +14,9 @@ const Login = () => {
   }, [isLoggedIn, router]);
   return (
     <Layout>
-      <FormTabs />
-      <LoginForm />
+      <MigrateForm />
     </Layout>
   );
 };
 
-export default Login;
+export default Migrate;

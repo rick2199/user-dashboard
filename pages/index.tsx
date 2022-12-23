@@ -1,17 +1,16 @@
-import { Layout } from "@/components/organisms/layout";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { ProfilePage } from "@/components/layout/profile";
 
-const Home = () => {
-  const router = useRouter();
-  useEffect(() => {
-    router.replace("/login", undefined, { shallow: true });
-  }, [router]);
-  return (
-    <Layout>
-      <div></div>
-    </Layout>
-  );
+interface ProfileProps {
+  data: {
+    newsletterData: {
+      freeListsDB: string[];
+      premiumListsDB: string[];
+    };
+  };
+}
+
+const Profile: React.FC<ProfileProps> = ({ data }) => {
+  return <ProfilePage />;
 };
 
-export default Home;
+export default Profile;

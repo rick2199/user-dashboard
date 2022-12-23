@@ -15,7 +15,6 @@ const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const redirectUri = router.query.redirect_uri;
-  const storagedUri = localStorage.getItem("redirectUri");
 
   const onSubmit = async (
     {
@@ -35,7 +34,6 @@ const LoginForm = () => {
     setLoading(true);
     const clientHash = keccak(256)(password);
     const isEmail = userName.includes("@");
-    console.log({ isEmail });
 
     try {
       const { data, status } = await authClient({
@@ -54,19 +52,23 @@ const LoginForm = () => {
             },
       });
       if (status === 200) {
-        //GENERATE JWT
+        // GENERATE JWT
         localStorage.setItem("token", data.token);
         console.log("success");
         resetForm();
-        if (redirectUri) {
-          window.location.replace(decodeURIComponent(redirectUri as string));
-        }
-        if (storagedUri) {
-          window.location.replace(storagedUri);
-        } else {
-          window.location.replace(
-            process.env.NEXT_PUBLIC_LOCAL_SITE_URL as string
-          );
+        if (typeof window !== undefined) {
+          const storagedUri = localStorage.getItem("redirectUri");
+          const win: Window | null = window;
+          if (!redirectUri && storagedUri === "undefined") {
+            win.location = process.env.NEXT_PUBLIC_BLOG_URL_URL as string;
+          }
+          if (redirectUri) {
+            win.location = decodeURIComponent(redirectUri as string);
+          }
+
+          if (storagedUri && storagedUri !== "undefined") {
+            win.location = storagedUri;
+          }
         }
       }
     } catch (err) {
@@ -107,7 +109,7 @@ const LoginForm = () => {
         validate={async ({ userName, password }) => {
           const errors: any = {};
           if (!userName) {
-            errors.email = "Please enter an email or userName";
+            errors.userName = "Please enter an email or username";
           }
           if (userName && userName.includes("@")) {
             try {
@@ -117,7 +119,7 @@ const LoginForm = () => {
               });
 
               if (!res.data.data.valid) {
-                errors.email =
+                errors.userName =
                   "You need to migrate your account first, click here";
               }
             } catch (error) {
@@ -164,14 +166,9 @@ const LoginForm = () => {
                         {onSubmitError}
                       </Text>
                     )}
-                    <Link
-                      href="/forgot-password"
-                      className={`cursor-pointer ${
-                        errors.password && touched.password ? "mt-4" : ""
-                      }`}
-                    >
-                      <Text className="pt-1 w-max text-end underline">
-                        I need help
+                    <Link href="/forgot-password" className="cursor-pointer">
+                      <Text className="w-max text-end underline">
+                        Forgot your password?
                       </Text>
                     </Link>
                   </div>
