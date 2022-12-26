@@ -5,13 +5,13 @@ import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 
 const ResetPassword = () => {
-  const { isLoggedIn } = useContext(UserContext);
-  const router = useRouter();
+  const { isLoggedIn, logout } = useContext(UserContext);
   useEffect(() => {
     if (isLoggedIn) {
-      router.replace("/", undefined, { shallow: true });
+      logout();
     }
-  }, [isLoggedIn, router]);
+  }, [logout, isLoggedIn]);
+
   return (
     <Layout>
       <ResetPasswordForm />

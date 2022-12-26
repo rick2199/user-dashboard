@@ -9,21 +9,13 @@ import { FormField } from "@/components/molecules/form-fields";
 import { Text } from "@/components/atoms/text";
 import FormDescription from "./form-description";
 import { useRouter } from "next/router";
-import { UserContext } from "@/context/user-context";
 
 const ResetPasswordForm = () => {
   const router = useRouter();
   const token = router.query.token;
   const [onSubmitError, setOnSubmitError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [successView, setSuccessView] = useState<boolean>(true);
-  const { logout, token: loggedInToken } = useContext(UserContext);
-
-  useEffect(() => {
-    if (loggedInToken) {
-      logout();
-    }
-  }, [logout, loggedInToken]);
+  const [successView, setSuccessView] = useState<boolean>(false);
 
   return (
     <div className="h-full w-full md:px-6 lg:px-0 bg-white text-center">
