@@ -56,7 +56,7 @@ const LoginForm = () => {
         localStorage.setItem("token", data.token);
         console.log("success");
         resetForm();
-        if (typeof window !== undefined) {
+        if (typeof window !== "undefined") {
           const storagedUri = localStorage.getItem("redirectUri");
           const win: Window | null = window;
           if (!redirectUri && storagedUri === "undefined") {
@@ -69,6 +69,8 @@ const LoginForm = () => {
           if (storagedUri && storagedUri !== "undefined") {
             win.location = storagedUri;
           }
+        } else {
+          router.push("/");
         }
       }
     } catch (err) {
