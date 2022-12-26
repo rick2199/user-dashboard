@@ -68,6 +68,8 @@ const LoginForm = () => {
 
           if (storagedUri && storagedUri !== "undefined") {
             win.location = storagedUri;
+          } else {
+            router.push("/");
           }
         } else {
           router.push("/");
