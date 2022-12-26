@@ -58,22 +58,28 @@ const LoginForm = () => {
         resetForm();
         if (typeof window !== "undefined") {
           const storagedUri = localStorage.getItem("redirectUri");
+          console.log({ storagedUri });
+          console.log({ redirectUri });
           const win: Window | null = window;
           if (!redirectUri && storagedUri === "undefined") {
-            win.location = process.env.NEXT_PUBLIC_BLOG_URL_URL as string;
+            win.location.replace(
+              process.env.NEXT_PUBLIC_BLOG_URL_URL as string
+            );
           }
           if (redirectUri) {
-            win.location = decodeURIComponent(redirectUri as string);
+            win.location.replace(decodeURIComponent(redirectUri as string));
           }
 
           if (storagedUri && storagedUri !== "undefined") {
-            win.location = storagedUri;
+            win.location.replace(storagedUri);
           } else {
-            router.push("/");
+            win.location.replace(
+              process.env.NEXT_PUBLIC_BLOG_URL_URL as string
+            );
           }
-        } else {
-          router.push("/");
         }
+
+        window.location.replace(process.env.NEXT_PUBLIC_BLOG_URL_URL as string);
       }
     } catch (err) {
       console.log(err);
