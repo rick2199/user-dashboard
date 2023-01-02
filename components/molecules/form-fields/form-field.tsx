@@ -21,7 +21,7 @@ const MigrateError = () => {
     <button
       className="text-text-light"
       onClick={() => {
-        router.push("/login");
+        router.push("/migrate");
       }}
     >
       You need to migrate your account first,{" "}
